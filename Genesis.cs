@@ -16,6 +16,7 @@ using static Nautilus.Assets.PrefabTemplates.FabricatorTemplate;
 using UnityEngine.Assertions;
 using VehicleFramework.Assets;
 using VehicleFramework.Engines;
+using RoyalCommonalities.Items.Materials;
 
 namespace GenesisCarrier
 {
@@ -33,6 +34,24 @@ namespace GenesisCarrier
         public static void GetAssets()
         {
             assets = AssetBundleInterface.GetVehicleAssetsFromBundle("assets/genesis", "Genesis_vehicle");
+        }
+        public override string vehicleDefaultName
+        {
+            get
+            {
+                Language main = Language.main;
+                bool flag = !(main != null);
+                string result;
+                if (flag)
+                {
+                    result = "Genesis";
+                }
+                else
+                {
+                    result = main.Get("Genesis");
+                }
+                return result;
+            }
         }
         public override List<VehiclePilotSeat> PilotSeats
         {
@@ -76,7 +95,21 @@ namespace GenesisCarrier
                 return list;
             }
         }
+        public override GameObject StorageRootObject
+        {
+            get
+            {
+                return transform.Find("StorageRoot").gameObject;
+            }
+        }
 
+        public override GameObject ModulesRootObject
+        {
+            get
+            {
+                return transform.Find("ModulesRoot").gameObject;
+            }
+        }
         public override GameObject VehicleModel
         {
             get
@@ -104,11 +137,29 @@ namespace GenesisCarrier
                 return list;
             }
         }
-        public override GameObject BoundingBox
+
+        public override BoxCollider BoundingBoxCollider
         {
             get
             {
-                return transform.Find("BoundingBoxCollider").gameObject;
+                return transform.Find("BoundingBoxCollider").gameObject.GetComponent<BoxCollider>();
+            }
+        }
+        public override List<VehicleStorage> InnateStorages
+        {
+            get
+            {
+                var list = new List<VehicleFramework.VehicleParts.VehicleStorage>();
+
+                Transform innate1 = transform.Find("InnateStorages/Storage1");
+
+                VehicleFramework.VehicleParts.VehicleStorage IS1 = new VehicleFramework.VehicleParts.VehicleStorage();
+                IS1.Container = innate1.gameObject;
+                IS1.Height = 10;
+                IS1.Width = 10;
+                list.Add(IS1);
+
+                return list;
             }
         }
         public override List<VehicleUpgrades> Upgrades
@@ -123,6 +174,28 @@ namespace GenesisCarrier
                 return list;
             }
         }
+        public override List<GameObject> CanopyWindows
+        {
+            get
+            {
+                var list = new List<GameObject>();
+                list.Add(transform.Find("Model/Conopy").gameObject);
+                return list;
+            }
+        }
+        public override Dictionary<TechType, int> Recipe
+        {
+
+            get
+            {
+                Dictionary<TechType, int> recipe = new Dictionary<TechType, int>();
+                recipe.Add(ModularHullPiece.Info.TechType, 6);
+                recipe.Add(TechType.AdvancedWiringKit, 4);
+                recipe.Add(TechType.ReactorRod, 2);
+                return recipe;
+
+            }
+        }
         public override ModVehicleEngine Engine
         {
             get
@@ -132,7 +205,15 @@ namespace GenesisCarrier
             }
 
         }
-        public override int Mass => 5000;
+        public override Atlas.Sprite CraftingSprite => VehicleFramework.Assets.SpriteHelper.GetSprite("assets/GenesisCrafter.png");
+        public override Atlas.Sprite PingSprite => VehicleFramework.Assets.SpriteHelper.GetSprite("assets/GenesisPing.png");
+        public override float ExitVelocityLimit => 999999;
+        public override int Mass => 1000000;
         public override int NumModules => 2;
+        public override string Description => "A flipin Aircraft Carrier Baby!!!";
+        public override string EncyclopediaEntry => "todo";
+        public override int BaseCrushDepth => 9999;
+        public override int MaxHealth => 290000;
+        public override bool CanLeviathanGrab => false;
     }
 }

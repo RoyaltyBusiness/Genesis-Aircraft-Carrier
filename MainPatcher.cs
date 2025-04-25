@@ -25,7 +25,7 @@ namespace GenesisCarrier
             message.ShowMessage(msg, 5);
         }
     }
-    [BepInPlugin("com.royalty.subnautica.genesis.mod", "Genesis", "0.5.0")]
+    [BepInPlugin("com.royalty.subnautica.genesis.mod", "Genesis", "0.6.8")]
     [BepInDependency("com.mikjaw.subnautica.vehicleframework.mod")]
     [BepInDependency("com.snmodding.nautilus")]
 
